@@ -13,7 +13,7 @@ namespace VolleyballTools.PDF
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.3SET.PDF"))
+            using (Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.3SET.pdf"))
             {
                 if (stream == null)
                     throw new ArgumentException();
