@@ -1,0 +1,145 @@
+﻿@page "/"
+@inject IJSRuntime JS
+
+<PageTitle>Index</PageTitle>
+<style>
+    h3 {
+        font-weight: 700;
+    }
+
+    .form-label {
+        margin-bottom: .2rem;
+        font-weight: 600 !important;
+    }
+
+    .form-support {
+        margin-bottom: .2rem;
+        color: #626264;
+    }
+</style>
+
+<h3>単一のスコアシートを作成する</h3>
+<p class="form-support">印刷後に記入する箇所は空欄にしてください</p>
+<p class="form-support" style="text-decoration:line-through;">内容の異なる記録用紙を作成するには、「複数枚作成モード」を利用します</p>
+
+<div class="mb-3 mt-3">
+    <label class="form-label fw-bold">試合名</label>
+    <input type="text" @bind="competition.MatchName" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label fw-bold">開催地</p>
+    <input type="text" @bind="competition.Venue" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label">会場名</p>
+    <input type="text" @bind="competition.Hall" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label">開催日</p>
+    <input type="date" @bind="competition.DateTime" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label">試合番号</p>
+    <input type="text" @bind="match.MatchNumber" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label">Aチーム名</p>
+    <input type="text" @bind="match.ATeam" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <p class="form-label">Bチーム名</p>
+    <input type="text" @bind="match.BTeam" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">性別</label>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(true))" id="SexRadio1">
+        <label class="form-check-label" for="SexRadio1">
+            男子
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(false))" id="SexRadio2">
+        <label class="form-check-label" for="SexRadio2">
+            女子
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(null))" id="SexRadio3" checked>
+        <label class="form-check-label" for="SexRadio3">
+            未選択
+        </label>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">セット数</label>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio1" checked>
+        <label class="form-check-label" for="SetRadio1">
+            3セット
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio2" disabled>
+        <label class="form-check-label" for="SetRadio2" >
+            5セット
+        </label>
+    </div>
+</div>
+
+<button class="btn btn-primary" @onclick="IncrementCount">生成</button>
+
+@code {
+    private void SelectGender(bool? b)
+    {
+        match.isMen = b;
+    }
+    public Competition competition = new();
+    public Match match = new();
+    public class Competition
+    {
+        public string? MatchName { get; set; } = null;
+        public string? Venue { get; set; } = null;
+        public string? Hall { get; set; } = null;
+        public DateTime? DateTime { get; set; } = null;
+    }
+    public class Match : Competition
+    {
+        public bool? isMen { get; set; } = null;
+        public string? ATeam { get; set; } = null;
+        public string? BTeam { get; set; } = null;
+        public string? MatchNumber { get; set; } = null;
+    }
+    //private void IncremantMatch()
+    //{
+    //    matches.Add(new());
+    //}
+    private async void IncrementCount()
+    {
+        var PDF = new PDF.PDF();
+        var fileStream = PDF.Generate(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam,match.isMen);
+
+        await DownloadFileFromStream(fileStream);
+    }
+
+    private async Task DownloadFileFromStream(Stream fileStream)
+    {
+        var fileName = $"Scoresheet.pdf";
+        if (competition.MatchName is not null)
+        {
+            fileName = $"{competition.MatchName}-{fileName}";
+        }
+
+        using var streamRef = new DotNetStreamReference(stream: fileStream);
+
+        await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+    }
+}
