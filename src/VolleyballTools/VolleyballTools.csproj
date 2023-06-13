@@ -8,7 +8,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="fonts\NotoSansJP-Regular.ttf" />
-    <EmbeddedResource Include="PDF\3SET.PDF" />
+    <EmbeddedResource Include="PDF\3SET.PDF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
