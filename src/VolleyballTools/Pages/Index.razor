@@ -95,7 +95,7 @@
     </div>
 </div>
 
-<button class="btn btn-primary" @onclick="IncrementCount">生成</button>
+<button class="btn btn-primary mb-3" @onclick="IncrementCount">生成</button>
 
 @code {
     private void SelectGender(bool? b)
@@ -118,10 +118,7 @@
         public string? BTeam { get; set; } = null;
         public string? MatchNumber { get; set; } = null;
     }
-    //private void IncremantMatch()
-    //{
-    //    matches.Add(new());
-    //}
+
     private async void IncrementCount()
     {
         var PDF = new PDF.PDF();
@@ -132,6 +129,7 @@
 
     private async Task DownloadFileFromStream(Stream fileStream)
     {
+
         var fileName = $"Scoresheet.pdf";
         if (competition.MatchName is not null)
         {
