@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IJSRuntime JS
+@inject PDF.PDF PDF
 
 <PageTitle>Index</PageTitle>
 <style>
@@ -43,6 +44,11 @@
 </div>
 
 <div class="mb-3">
+    <p class="form-label">試合設定時間</p>
+    <input type="time" @bind="competition.MatchTime" class="form-control" id="exampleFormControlInput1">
+</div>
+
+<div class="mb-3">
     <p class="form-label">試合番号</p>
     <input type="text" @bind="match.MatchNumber" class="form-control" id="exampleFormControlInput1">
 </div>
@@ -82,20 +88,20 @@
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">セット数</label>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio1" checked>
+        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio1" @onclick="@(()=>SET = 3)" checked>
         <label class="form-check-label" for="SetRadio1">
             3セット
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio2" disabled>
-        <label class="form-check-label" for="SetRadio2" >
+        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio2" @onclick="@(()=>SET = 5)">
+        <label class="form-check-label" for="SetRadio2">
             5セット
         </label>
     </div>
 </div>
 
-<button class="btn btn-primary mb-3" @onclick="IncrementCount">生成</button>
+<button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">生成</button>
 
 @code {
     private void SelectGender(bool? b)
@@ -104,12 +110,14 @@
     }
     public Competition competition = new();
     public Match match = new();
+    public int SET { get; set; } = 3;
     public class Competition
     {
         public string? MatchName { get; set; } = null;
         public string? Venue { get; set; } = null;
         public string? Hall { get; set; } = null;
         public DateTime? DateTime { get; set; } = null;
+        public DateTime? MatchTime { get; set; } = null;
     }
     public class Match : Competition
     {
@@ -121,8 +129,15 @@
 
     private async void IncrementCount()
     {
-        var PDF = new PDF.PDF();
-        var fileStream = PDF.Generate(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam,match.isMen);
+        Stream fileStream;
+        if (SET == 3)
+        {
+            fileStream = PDF.Generate3SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+        }
+        else
+        {
+            fileStream = PDF.Generate5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+        }
 
         await DownloadFileFromStream(fileStream);
     }
@@ -139,5 +154,7 @@
         using var streamRef = new DotNetStreamReference(stream: fileStream);
 
         await JS.InvokeVoidAsync("downloadFileFromStream", fileName, streamRef);
+
+        streamRef.Dispose();
     }
 }

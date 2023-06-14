@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using VolleyballTools.PDF;
 
 namespace VolleyballTools.Client
 {
@@ -12,6 +13,8 @@ namespace VolleyballTools.Client
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            builder.Services.AddSingleton<PDF.PDF>();
 
             await builder.Build().RunAsync();
         }
