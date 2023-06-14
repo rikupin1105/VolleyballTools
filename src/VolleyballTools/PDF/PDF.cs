@@ -87,6 +87,9 @@ namespace VolleyballTools.PDF
             var textColor = XBrushes.Black;
             var format = XStringFormats.CenterLeft;
 
+
+            //gfx.DrawRectangle(textColor, new XRect(650, 180, 55, 15));
+
             if (MatchName is not null)
             {
                 gfx.DrawString(MatchName,
@@ -148,20 +151,30 @@ namespace VolleyballTools.PDF
 
             if (ATeam is not null)
             {
-
                 gfx.DrawString(ATeam,
                     AutoFontSize(ATeam, 8, 90, gfx),
                    textColor,
                    new XRect(405, 85, 90, 15),
                    XStringFormats.Center);
+
+                gfx.DrawString(ATeam,
+                    AutoFontSize(ATeam, 8, 55, gfx),
+                   textColor,
+                   new XRect(735, 180, 55, 15),
+                   XStringFormats.Center);
             }
             if (BTeam is not null)
             {
                 gfx.DrawString(BTeam,
-
                     AutoFontSize(BTeam, 8, 90, gfx),
                    textColor,
                    new XRect(515, 85, 90, 15),
+                   XStringFormats.Center);
+
+                gfx.DrawString(BTeam,
+                    AutoFontSize(BTeam, 8, 55, gfx),
+                   textColor,
+                   new XRect(650, 180, 55, 15),
                    XStringFormats.Center);
             }
 
@@ -235,7 +248,6 @@ namespace VolleyballTools.PDF
                     format);
             }
 
-            //gfx.DrawRectangle(textColor, new XRect(745, 310.5, 65, 8));
 
             if (Venue is not null)
             {
