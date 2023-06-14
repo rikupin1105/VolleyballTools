@@ -37,10 +37,7 @@ namespace VolleyballTools.PDF
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
-            if (stream == null)
-                throw new ArgumentException("No resource with name " + resourceName);
-
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName)??throw new ArgumentException("No resource with name " + resourceName);
             int count = (int)stream.Length;
             byte[] data = new byte[count];
             stream.Read(data, 0, count);
