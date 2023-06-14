@@ -11,6 +11,9 @@
     <EmbeddedResource Include="PDF\3SET.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="PDF\5SET.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory> 
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
