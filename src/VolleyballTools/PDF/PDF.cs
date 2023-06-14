@@ -19,36 +19,26 @@ namespace VolleyballTools.PDF
             three,
             five
         }
-        private Stream Template(ScoresheetTemplate set)
+        private static Stream Template(ScoresheetTemplate set)
         {
             var assembly = Assembly.GetExecutingAssembly();
             if (set == ScoresheetTemplate.three)
             {
-                using (Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.3SET.pdf"))
-                {
-                    if (stream == null)
-                        throw new ArgumentException();
+                using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.3SET.pdf")??throw new ArgumentException("3SET.pdf");
+                int count = (int)stream.Length;
+                byte[] data = new byte[count];
+                stream.Read(data, 0, count);
 
-                    int count = (int)stream.Length;
-                    byte[] data = new byte[count];
-                    stream.Read(data, 0, count);
-
-                    return new MemoryStream(data);
-                }
+                return new MemoryStream(data);
             }
             else
             {
-                using (Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.5SET.pdf"))
-                {
-                    if (stream == null)
-                        throw new ArgumentException();
+                using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.5SET.pdf")??throw new ArgumentException("5SET.pdf");
+                int count = (int)stream.Length;
+                byte[] data = new byte[count];
+                stream.Read(data, 0, count);
 
-                    int count = (int)stream.Length;
-                    byte[] data = new byte[count];
-                    stream.Read(data, 0, count);
-
-                    return new MemoryStream(data);
-                }
+                return new MemoryStream(data);
             }
         }
 
@@ -211,12 +201,11 @@ namespace VolleyballTools.PDF
             }
             pdfdoc.Pages[0].Rotate = 90;
 
-            MemoryStream stream = new MemoryStream();
+            var stream = new MemoryStream();
             pdfdoc.Save(stream, false);
 
             return stream;
         }
-
         public Stream Generate5SET(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null)
         {
             var pdfdoc = new PdfDocument();
@@ -366,7 +355,7 @@ namespace VolleyballTools.PDF
 
             pdfdoc.Save("aaa.pdf");
 
-            MemoryStream stream = new MemoryStream();
+            var stream = new MemoryStream();
             pdfdoc.Save(stream, false);
 
             return stream;

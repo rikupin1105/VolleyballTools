@@ -16,7 +16,7 @@ namespace VolleyballTools.PDF.Tests
         {
             var pdf = new PDF();
 
-            var stream = pdf.Generate5SET("試合名","開催地名","会場名",DateTime.Now,"A-12","ATeam","BTeam",true,DateTime.Now);
+            pdf.Generate5SET("試合名","開催地名","会場名",DateTime.Now,"A-12","ATeam","BTeam",true,DateTime.Now);
             
             
             Assert.Fail();

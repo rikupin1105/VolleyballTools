@@ -10,14 +10,13 @@ namespace VolleyballTools.PDF
 
         public string DefaultFontName => "NotoSansJP";
 
-        public byte[] GetFont(string faceName)
+        public byte[]? GetFont(string faceName)
         {
-            switch (faceName)
+            return faceName switch
             {
-                case "NotoSansJP#Regular":
-                    return LoadFontData(NOTO_SANS_JP_REGULAR_TTF);
-            }
-            return null;
+                "NotoSansJP#Regular" => LoadFontData(NOTO_SANS_JP_REGULAR_TTF),
+                _ => null,
+            };
         }
 
         public FontResolverInfo ResolveTypeface(
@@ -25,31 +24,27 @@ namespace VolleyballTools.PDF
         {
             var fontName = familyName.ToLower();
 
-            switch (fontName)
+            return fontName switch
             {
-                case "notosans":
-                    return new FontResolverInfo("NotoSansJP#Regular");
-            }
-
-            // デフォルトのフォント
-            return PlatformFontResolver.ResolveTypeface("NotoSansJP", isBold, isItalic);
+                "notosans" => new FontResolverInfo("NotoSansJP#Regular"),
+                // デフォルトのフォント
+                _ => PlatformFontResolver.ResolveTypeface("NotoSansJP", isBold, isItalic),
+            };
         }
 
         // 埋め込みリソースからフォントファイルを読み込む
-        private byte[] LoadFontData(string resourceName)
+        private static byte[] LoadFontData(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            using (Stream? stream = assembly.GetManifestResourceStream(resourceName))
-            {
-                if (stream == null)
-                    throw new ArgumentException("No resource with name " + resourceName);
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+            if (stream == null)
+                throw new ArgumentException("No resource with name " + resourceName);
 
-                int count = (int)stream.Length;
-                byte[] data = new byte[count];
-                stream.Read(data, 0, count);
-                return data;
-            }
+            int count = (int)stream.Length;
+            byte[] data = new byte[count];
+            stream.Read(data, 0, count);
+            return data;
         }
 
     }
