@@ -160,7 +160,7 @@ namespace VolleyballTools.PDF
                 gfx.DrawString(ATeam,
                     AutoFontSize(ATeam, 8, 55, gfx),
                    textColor,
-                   new XRect(735, 180, 55, 15),
+                   new XRect(650, 180, 55, 15),
                    XStringFormats.Center);
             }
             if (BTeam is not null)
@@ -174,7 +174,7 @@ namespace VolleyballTools.PDF
                 gfx.DrawString(BTeam,
                     AutoFontSize(BTeam, 8, 55, gfx),
                    textColor,
-                   new XRect(650, 180, 55, 15),
+                   new XRect(735, 180, 55, 15),
                    XStringFormats.Center);
             }
 
