@@ -1,4 +1,4 @@
-﻿@page "/scoresheet"
+﻿@page "/scoresheet9"
 @inject IJSRuntime JS
 @inject PDF.PDF PDF
 
@@ -18,7 +18,7 @@
     }
 </style>
 
-<h3>6人制 スコアシート(単)を作成する</h3>
+<h3>9人制 スコアシート(単)を作成する</h3>
 <p class="form-support">印刷後に記入する箇所は空欄にしてください</p>
 <p class="form-support" style="text-decoration:line-through;">内容の異なる記録用紙を作成するには、「複数枚作成モード」を利用します</p>
 
@@ -84,22 +84,6 @@
     </div>
 </div>
 
-<div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">セット数</label>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio1" @onclick="@(()=>SET = 3)" checked>
-        <label class="form-check-label" for="SetRadio1">
-            3セット
-        </label>
-    </div>
-    <div class="form-check">
-        <input class="form-check-input" type="radio" name="SetRadio" id="SetRadio2" @onclick="@(()=>SET = 5)">
-        <label class="form-check-label" for="SetRadio2">
-            5セット
-        </label>
-    </div>
-</div>
-
 <button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">生成</button>
 
 @code {
@@ -128,22 +112,12 @@
 
     private async void IncrementCount()
     {
-        Stream fileStream;
-        if (SET == 3)
-        {
-            fileStream = PDF.Generate3SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
-        }
-        else
-        {
-            fileStream = PDF.Generate5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
-        }
-
+        var fileStream = PDF.Generate9Parson(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
         await DownloadFileFromStream(fileStream);
     }
 
     private async Task DownloadFileFromStream(Stream fileStream)
     {
-
         var fileName = $"Scoresheet.pdf";
         if (competition.MatchName is not null)
         {
