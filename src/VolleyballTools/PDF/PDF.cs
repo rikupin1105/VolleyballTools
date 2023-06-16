@@ -32,7 +32,7 @@ namespace VolleyballTools.PDF
 
                 return new MemoryStream(data);
             }
-            else if(set == ScoresheetTemplate.nineParson)
+            else if (set == ScoresheetTemplate.nineParson)
             {
                 using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.9Parson.pdf")??throw new ArgumentException("9Parson.pdf");
                 int count = (int)stream.Length;
@@ -370,7 +370,7 @@ namespace VolleyballTools.PDF
 
             return stream;
         }
-        public Stream Generate9Parson(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null)
+        public Stream Generate9Parson(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null, List<Player>? ATeamPlayer = null, List<Player>? BTeamPlayer = null)
         {
             var pdfdoc = new PdfDocument();
 
@@ -392,8 +392,7 @@ namespace VolleyballTools.PDF
             var textColor = XBrushes.Black;
             var format = XStringFormats.CenterLeft;
 
-
-            //gfx.DrawRectangle(textColor, new XRect(742, 122, 64, 15));
+            //gfx.DrawRectangle(textColor, new XRect(677, 154, 60, 10));
 
             if (MatchName is not null)
             {
@@ -488,15 +487,15 @@ namespace VolleyballTools.PDF
                 if ((bool)isMen)
                 {
                     //男子
-                    gfx.DrawLine(new XPen(textColor), 290+305, 107.5, 581,96.5);
-                    gfx.DrawLine(new XPen(textColor), 290+305,96.5, 581, 107.5);
+                    gfx.DrawLine(new XPen(textColor), 290+305, 107.5, 581, 96.5);
+                    gfx.DrawLine(new XPen(textColor), 290+305, 96.5, 581, 107.5);
                 }
                 else
                 {
                     //女子
 
-                    gfx.DrawLine(new XPen(textColor), 633, 107.5, 621,96.5);
-                    gfx.DrawLine(new XPen(textColor), 633,96.5, 621, 107.5);
+                    gfx.DrawLine(new XPen(textColor), 633, 107.5, 621, 96.5);
+                    gfx.DrawLine(new XPen(textColor), 633, 96.5, 621, 107.5);
                 }
             }
 
@@ -515,7 +514,61 @@ namespace VolleyballTools.PDF
                    new XRect(630, 75, 20, 15),
                    XStringFormats.Center);
             }
+
+
+            if (ATeamPlayer is not null)
+            {
+                for (int i = 0; i < ATeamPlayer.Count(); i++)
+                {
+                    if (ATeamPlayer[i].Number is not null)
+                    {
+                        gfx.DrawString(ATeamPlayer[i].Number.ToString(),
+                       new XFont("notosans", 8, XFontStyle.Regular),
+                       textColor,
+                       new XRect(660, 154 + (i * 14), 15, 10),
+                       XStringFormats.Center);
+                    }
+
+                    if (ATeamPlayer[i].Name is not null)
+                    {
+
+                        gfx.DrawString(ATeamPlayer[i].Name,
+                            AutoFontSize(ATeamPlayer[i].Name!, 8, 60, gfx),
+                       textColor,
+                       new XRect(677, 154 + (i * 14), 60, 10),
+                       XStringFormats.Center);
+                    }
+                }
+            }
+
+            if (BTeamPlayer is not null)
+            {
+                for (int i = 0; i < BTeamPlayer.Count(); i++)
+                {
+                    if (BTeamPlayer[i].Number is not null)
+                    {
+                        gfx.DrawString(BTeamPlayer[i].Number.ToString(),
+                       new XFont("notosans", 8, XFontStyle.Regular),
+                       textColor,
+                       new XRect(742, 154 + (i * 14), 15, 10),
+                       XStringFormats.Center);
+                    }
+
+                    if (BTeamPlayer[i].Name is not null)
+                    {
+
+                        gfx.DrawString(BTeamPlayer[i].Name,
+                            AutoFontSize(BTeamPlayer[i].Name!, 8, 60, gfx),
+                       textColor,
+                       new XRect(759, 154 + (i * 14), 60, 10),
+                       XStringFormats.Center);
+                    }
+                }
+            }
+
             pdfdoc.Pages[0].Rotate = 90;
+            var h = pdfdoc.Pages[0].Height;
+            var w = pdfdoc.Pages[0].Width;
 
             var stream = new MemoryStream();
             pdfdoc.Save(stream, false);

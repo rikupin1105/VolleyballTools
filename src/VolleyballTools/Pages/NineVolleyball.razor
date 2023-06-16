@@ -52,14 +52,75 @@
     <input type="text" @bind="match.MatchNumber" class="form-control" id="exampleFormControlInput1">
 </div>
 
-<div class="mb-3">
-    <p class="form-label">Aチーム名</p>
-    <input type="text" @bind="match.ATeam" class="form-control" id="exampleFormControlInput1">
+
+<div class="card mb-3">
+    <div class="mb-3 card-body">
+        <p class="form-label">Aチーム名</p>
+        <input type="text" @bind="match.ATeam" class="form-control mb-3">
+
+        <div class="row me-1">
+            <div class="col-md-2 col-3">
+                <p class="form-label" hidden="@(ATeamPlayers.Count()<=0)">番号</p>
+            </div>
+
+            <div class="col-md-9 col-7">
+                <p class="form-label" hidden="@(ATeamPlayers.Count()<=0)">名前</p>
+            </div>
+
+            @foreach (var player in ATeamPlayers)
+            {
+                <div class="mb-1 col-md-2 col-3">
+                    <input type="number" @bind="player.Number" class="form-control">
+                </div>
+
+                <div class="mb-1 col-lg-9 col-md-8 col-7">
+                    <input type="text" @bind="player.Name" class="form-control">
+                </div>
+                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>PlayerDeleteAt(player,true))">
+                    削除
+                </button>
+            }
+        </div>
+
+        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>PlayerAdd(true))" disabled="@(ATeamPlayers.Count>=15)">
+            選手を追加
+        </button>
+    </div>
 </div>
 
-<div class="mb-3">
-    <p class="form-label">Bチーム名</p>
-    <input type="text" @bind="match.BTeam" class="form-control" id="exampleFormControlInput1">
+<div class="card mb-3">
+    <div class="mb-3 card-body">
+        <p class="form-label">Bチーム名</p>
+        <input type="text" @bind="match.BTeam" class="form-control mb-3">
+
+        <div class="row me-1">
+            <div class="col-md-2 col-3">
+                <p class="form-label" hidden="@(BTeamPlayers.Count()<=0)">番号</p>
+            </div>
+
+            <div class="col-md-9 col-7">
+                <p class="form-label" hidden="@(BTeamPlayers.Count()<=0)">名前</p>
+            </div>
+
+            @foreach (var player in BTeamPlayers)
+            {
+                <div class="mb-1 col-md-2 col-3">
+                    <input type="number" @bind="player.Number" class="form-control">
+                </div>
+
+                <div class="mb-1 col-lg-9 col-md-8 col-7">
+                    <input type="text" @bind="player.Name" class="form-control">
+                </div>
+                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>PlayerDeleteAt(player,false))">
+                    削除
+                </button>
+            }
+        </div>
+
+        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>PlayerAdd(false))" disabled="@(BTeamPlayers.Count>=15)">
+            選手を追加
+        </button>
+    </div>
 </div>
 
 <div class="mb-3">
@@ -87,6 +148,28 @@
 <button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">生成</button>
 
 @code {
+    private void PlayerDeleteAt(Player player, bool isAteam)
+    {
+        if (isAteam)
+        {
+            ATeamPlayers.Remove(player);
+        }
+        else
+        {
+            BTeamPlayers.Remove(player);
+        }
+    }
+    private void PlayerAdd(bool isAteam)
+    {
+        if (isAteam)
+        {
+            ATeamPlayers.Add(new());
+        }
+        else
+        {
+            BTeamPlayers.Add(new());
+        }
+    }
     private void SelectGender(bool? b)
     {
         match.isMen = b;
@@ -94,6 +177,8 @@
     public Competition competition = new();
     public Match match = new();
     public int SET { get; set; } = 3;
+    public List<Player> ATeamPlayers { get; set; } = new();
+    public List<Player> BTeamPlayers { get; set; } = new();
     public class Competition
     {
         public string? MatchName { get; set; } = null;
@@ -112,7 +197,7 @@
 
     private async void IncrementCount()
     {
-        var fileStream = PDF.Generate9Parson(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+        var fileStream = PDF.Generate9Parson(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime, ATeamPlayers,BTeamPlayers);
         await DownloadFileFromStream(fileStream);
     }
 
