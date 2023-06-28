@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="PDF\Libero3.pdf" />
+    <None Remove="PDF\Libero5.pdf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="fonts\NotoSansJP-Regular.ttf" />
     <EmbeddedResource Include="PDF\3SET.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -16,6 +21,12 @@
     </EmbeddedResource>
 	  <EmbeddedResource Include="PDF\9Parson.pdf">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="PDF\Libero3.pdf">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </EmbeddedResource>
+	  <EmbeddedResource Include="PDF\Libero5.pdf">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>
   </ItemGroup>
 

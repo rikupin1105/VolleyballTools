@@ -1,4 +1,4 @@
-﻿@page "/scoresheet"
+﻿@page "/liberoControl"
 @inject IJSRuntime JS
 @inject PDF.PDF PDF
 
@@ -18,7 +18,7 @@
     }
 </style>
 
-<h3>6人制 スコアシートを作成する</h3>
+<h3>リベロコントロールシートを作成する</h3>
 <p class="form-support">印刷後に記入する箇所は空欄にしてください</p>
 
 <div class="mb-3 mt-3">
@@ -99,8 +99,7 @@
     </div>
 </div>
 
-<button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">スコアシートを生成</button>
-<button class="btn btn-primary mb-3 px-5" @onclick="LiberoControlSheet">リベロコントロールシートを生成</button>
+<button class="btn btn-primary mb-3 px-5" @onclick="Create">生成</button>
 
 @code {
     private void SelectGender(bool? b)
@@ -126,21 +125,7 @@
         public string? MatchNumber { get; set; } = null;
     }
 
-    private async void IncrementCount()
-    {
-        Stream fileStream;
-        if (SET == 3)
-        {
-            fileStream = PDF.Generate3SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
-        }
-        else
-        {
-            fileStream = PDF.Generate5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
-        }
-
-        await DownloadFileFromStream(fileStream, "Scoresheet.pdf");
-    }
-    private async void LiberoControlSheet()
+    private async void Create()
     {
         Stream fileStream;
         if (SET == 3)
@@ -151,7 +136,8 @@
         {
             fileStream = PDF.GanerateLibero5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
         }
-        await DownloadFileFromStream(fileStream,"LiberoControlSheet.pdf");
+
+        await DownloadFileFromStream(fileStream, "LiberoControlSheet.pdf");
     }
 
     private async Task DownloadFileFromStream(Stream fileStream,string fileName)

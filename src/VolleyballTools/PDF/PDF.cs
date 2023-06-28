@@ -18,12 +18,14 @@ namespace VolleyballTools.PDF
         {
             three,
             five,
-            nineParson
+            nineParson,
+            liberoThree,
+            liberoFive,
         }
-        private static Stream Template(ScoresheetTemplate set)
+        private static Stream Template(ScoresheetTemplate template)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            if (set == ScoresheetTemplate.three)
+            if (template == ScoresheetTemplate.three)
             {
                 using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.3SET.pdf")??throw new ArgumentException("3SET.pdf");
                 int count = (int)stream.Length;
@@ -32,9 +34,27 @@ namespace VolleyballTools.PDF
 
                 return new MemoryStream(data);
             }
-            else if (set == ScoresheetTemplate.nineParson)
+            else if (template == ScoresheetTemplate.nineParson)
             {
                 using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.9Parson.pdf")??throw new ArgumentException("9Parson.pdf");
+                int count = (int)stream.Length;
+                byte[] data = new byte[count];
+                stream.Read(data, 0, count);
+
+                return new MemoryStream(data);
+            }
+            else if (template==ScoresheetTemplate.liberoThree)
+            {
+                using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.Libero3.pdf")??throw new ArgumentException("Libero3.pdf");
+                int count = (int)stream.Length;
+                byte[] data = new byte[count];
+                stream.Read(data, 0, count);
+
+                return new MemoryStream(data);
+            }
+            else if (template==ScoresheetTemplate.liberoFive)
+            {
+                using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.Libero5.pdf")??throw new ArgumentException("Libero5.pdf");
                 int count = (int)stream.Length;
                 byte[] data = new byte[count];
                 stream.Read(data, 0, count);
@@ -569,6 +589,284 @@ namespace VolleyballTools.PDF
             pdfdoc.Pages[0].Rotate = 90;
             var h = pdfdoc.Pages[0].Height;
             var w = pdfdoc.Pages[0].Width;
+
+            var stream = new MemoryStream();
+            pdfdoc.Save(stream, false);
+
+            return stream;
+        }
+        public Stream GanerateLibero3SET(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null)
+        {
+            var pdfdoc = new PdfDocument();
+
+            PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.liberoThree), PdfDocumentOpenMode.Import);
+            var template = inputDocument.Pages[0];
+            template.Size = PdfSharpCore.PageSize.A4;
+            template.Orientation = PdfSharpCore.PageOrientation.Landscape;
+
+            //var page = pdfdoc.AddPage();
+            var page = pdfdoc.AddPage(template);
+            page.Orientation = PdfSharpCore.PageOrientation.Landscape;
+            page.Size = PdfSharpCore.PageSize.A4;
+            page.Rotate = 0;
+
+            var gfx = XGraphics.FromPdfPage(page);
+            gfx.RotateAtTransform(-90, new XPoint(0, 0));
+            gfx.TranslateTransform(-595, 0);
+
+            var textColor = XBrushes.Black;
+            var format = XStringFormats.CenterLeft;
+
+
+            //gfx.DrawRectangle(textColor, new XRect(0, 0, 842, 595));
+
+            if (MatchName is not null)
+            {
+                gfx.DrawString(MatchName,
+                    AutoFontSize(MatchName, 10, 483.1, gfx),
+                    textColor,
+                    new XRect(90, 31.6, 483.1, 15.6),
+                    format);
+            }
+
+            if (Venue is not null)
+            {
+                gfx.DrawString(Venue,
+                    AutoFontSize(Venue, 9, 221.7, gfx),
+                    textColor,
+                    new XRect(90, 49.9, 221.7, 12.9),
+                    format);
+            }
+
+            if (Hall is not null)
+            {
+                gfx.DrawString(Hall,
+
+                    AutoFontSize(Hall, 9, 221.7, gfx),
+                textColor,
+                    new XRect(90, 65.5, 221.7, 16.3),
+                    format);
+
+            }
+
+            if (MatchNumber is not null)
+            {
+                gfx.DrawString(MatchNumber,
+                    AutoFontSize(MatchNumber, 10, 91.4, gfx),
+                    textColor,
+                    new XRect(223.9, 84.2, 91.4, 13.4),
+                    XStringFormats.Center);
+            }
+
+            if (Date is not null)
+            {
+                gfx.DrawString(Date.Value.Year.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(361.2, 50.1, 30.4, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(Date.Value.Month.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(401.5, 50.1, 16.0, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(Date.Value.Day.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(426, 50.1, 16.0, 18.7),
+                   XStringFormats.Center);
+            }
+
+            if (ATeam is not null)
+            {
+                gfx.DrawString(ATeam,
+                    AutoFontSize(ATeam, 8, 81.3, gfx),
+                   textColor,
+                   new XRect(349.4, 72.2, 81.3, 24.9),
+                   XStringFormats.Center);
+            }
+            if (BTeam is not null)
+            {
+                gfx.DrawString(BTeam,
+                    AutoFontSize(BTeam, 8, 90, gfx),
+                   textColor,
+                   new XRect(463.6, 72.2, 81.3, 24.9),
+                   XStringFormats.Center);
+            }
+
+            if (isMen is not null)
+            {
+                if ((bool)isMen)
+                {
+                    //男子
+                    gfx.DrawLine(new XPen(textColor), 111.3, 86.4, 125.2, 95.2);
+                    gfx.DrawLine(new XPen(textColor), 111.3, 95.2, 125.2, 86.4);
+                }
+                else
+                {
+                    //女子
+                    gfx.DrawLine(new XPen(textColor), 154.5, 86.4, 168.4, 95.2);
+                    gfx.DrawLine(new XPen(textColor), 154.5, 95.2, 168.4, 86.4);
+                }
+            }
+
+            if (MatchTime is not null)
+            {
+
+                gfx.DrawString(MatchTime.Value.Hour.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(516.4, 50.1, 26.4, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(MatchTime.Value.Minute.ToString("00"),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(546.7, 50.1, 29.5, 18.7),
+                   XStringFormats.Center);
+            }
+            pdfdoc.Pages[0].Rotate = 90;
+
+            var stream = new MemoryStream();
+            pdfdoc.Save(stream, false);
+
+            return stream;
+        }
+        public Stream GanerateLibero5SET(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null)
+        {
+            var pdfdoc = new PdfDocument();
+
+            PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.liberoFive), PdfDocumentOpenMode.Import);
+            var template = inputDocument.Pages[0];
+            template.Size = PdfSharpCore.PageSize.A4;
+            template.Orientation = PdfSharpCore.PageOrientation.Landscape;
+
+            //var page = pdfdoc.AddPage();
+            var page = pdfdoc.AddPage(template);
+            page.Orientation = PdfSharpCore.PageOrientation.Landscape;
+            page.Size = PdfSharpCore.PageSize.A4;
+            page.Rotate = 0;
+
+            var gfx = XGraphics.FromPdfPage(page);
+            gfx.RotateAtTransform(-90, new XPoint(0, 0));
+            gfx.TranslateTransform(-595, 0);
+
+            var textColor = XBrushes.Black;
+            var format = XStringFormats.CenterLeft;
+
+
+            //gfx.DrawRectangle(textColor, new XRect(0, 0, 842, 595));
+
+            if (MatchName is not null)
+            {
+                gfx.DrawString(MatchName,
+                    AutoFontSize(MatchName, 10, 478.8, gfx),
+                    textColor,
+                    new XRect(97.4, 39.3, 478.8, 15.6),
+                    format);
+            }
+
+            if (Venue is not null)
+            {
+                gfx.DrawString(Venue,
+                    AutoFontSize(Venue, 9, 218.6, gfx),
+                    textColor,
+                    new XRect(97.4, 57.6, 218.6, 12.9),
+                    format);
+            }
+
+            if (Hall is not null)
+            {
+                gfx.DrawString(Hall,
+
+                    AutoFontSize(Hall, 9, 218.6, gfx),
+                textColor,
+                    new XRect(97.4, 73.2, 218.6, 16.3),
+                    format);
+
+            }
+
+            if (MatchNumber is not null)
+            {
+                gfx.DrawString(MatchNumber,
+                    AutoFontSize(MatchNumber, 10, 91.4, gfx),
+                    textColor,
+                    new XRect(227.5, 91.9, 91.4, 13.4),
+                    XStringFormats.Center);
+            }
+
+            if (Date is not null)
+            {
+                gfx.DrawString(Date.Value.Year.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(364.5, 57.8, 30.4, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(Date.Value.Month.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(404.8, 57.8, 16.0, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(Date.Value.Day.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(429.3, 57.8, 16.0, 18.7),
+                   XStringFormats.Center);
+            }
+
+            if (ATeam is not null)
+            {
+                gfx.DrawString(ATeam,
+                    AutoFontSize(ATeam, 8, 81.3, gfx),
+                   textColor,
+                   new XRect(353, 79.9, 81.3, 24.9),
+                   XStringFormats.Center);
+            }
+            if (BTeam is not null)
+            {
+                gfx.DrawString(BTeam,
+                    AutoFontSize(BTeam, 8, 90, gfx),
+                   textColor,
+                   new XRect(467.2, 79.9, 81.3, 24.9),
+                   XStringFormats.Center);
+            }
+
+            if (isMen is not null)
+            {
+                if ((bool)isMen)
+                {
+                    //男子
+                    gfx.DrawLine(new XPen(textColor), 115.2, 94.0, 129.1, 102.8);
+                    gfx.DrawLine(new XPen(textColor), 115.2, 102.8, 129.1, 94.0);
+                }
+                else
+                {
+                    //女子
+                    gfx.DrawLine(new XPen(textColor), 158.4, 94.0, 172.3, 102.8);
+                    gfx.DrawLine(new XPen(textColor), 158.4, 102.8, 172.3, 94.0);
+                }
+            }
+
+            if (MatchTime is not null)
+            {
+
+                gfx.DrawString(MatchTime.Value.Hour.ToString(),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(519.1, 57.6, 26.4, 18.7),
+                   XStringFormats.Center);
+
+                gfx.DrawString(MatchTime.Value.Minute.ToString("00"),
+                   new XFont("notosans", 8, XFontStyle.Regular),
+                   textColor,
+                   new XRect(549.4, 57.6, 29.5, 18.7),
+                   XStringFormats.Center);
+            }
+            pdfdoc.Pages[0].Rotate = 90;
 
             var stream = new MemoryStream();
             pdfdoc.Save(stream, false);
