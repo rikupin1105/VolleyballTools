@@ -91,7 +91,7 @@ namespace VolleyballTools.PDF
 
             PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.three), PdfDocumentOpenMode.Import);
             var template = inputDocument.Pages[0];
-            template.Size = PdfSharpCore.PageSize.A4;
+            template.Size = PdfSharpCore.PageSize.A3;
             template.Orientation = PdfSharpCore.PageOrientation.Landscape;
 
             //var page = pdfdoc.AddPage();
@@ -242,7 +242,7 @@ namespace VolleyballTools.PDF
 
             PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.five), PdfDocumentOpenMode.Import);
             var template = inputDocument.Pages[0];
-            template.Size = PdfSharpCore.PageSize.A4;
+            template.Size = PdfSharpCore.PageSize.A3;
             template.Orientation = PdfSharpCore.PageOrientation.Landscape;
 
             //var page = pdfdoc.AddPage();
@@ -396,7 +396,7 @@ namespace VolleyballTools.PDF
 
             PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.nineParson), PdfDocumentOpenMode.Import);
             var template = inputDocument.Pages[0];
-            template.Size = PdfSharpCore.PageSize.A4;
+            template.Size = PdfSharpCore.PageSize.A3;
             template.Orientation = PdfSharpCore.PageOrientation.Landscape;
 
             //var page = pdfdoc.AddPage();
