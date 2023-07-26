@@ -1,8 +1,11 @@
-﻿using PdfSharpCore.Drawing;
+﻿using Microsoft.Extensions.FileSystemGlobbing;
+using PdfSharpCore.Drawing;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
+using System.IO;
 using System.Reflection;
+using VolleyballTools.Model;
 using VolleyballTools.PDF;
 
 namespace VolleyballTools.PDF
@@ -21,6 +24,8 @@ namespace VolleyballTools.PDF
             nineParson,
             liberoThree,
             liberoFive,
+            beachone,
+            beachthree
         }
         private static Stream Template(ScoresheetTemplate template)
         {
@@ -61,6 +66,15 @@ namespace VolleyballTools.PDF
 
                 return new MemoryStream(data);
             }
+            else if (template==ScoresheetTemplate.beachone)
+            {
+                using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.Beach1.pdf")??throw new ArgumentException("Libero5.pdf");
+                int count = (int)stream.Length;
+                byte[] data = new byte[count];
+                stream.Read(data, 0, count);
+
+                return new MemoryStream(data);
+            }
             else
             {
                 using Stream? stream = assembly.GetManifestResourceStream("VolleyballTools.PDF.5SET.pdf")??throw new ArgumentException("5SET.pdf");
@@ -71,8 +85,18 @@ namespace VolleyballTools.PDF
                 return new MemoryStream(data);
             }
         }
+        private void RenderText(ref XGraphics gfx, string? text, XRect rect, double fontSize = 11, XStringFormat? format = null, XBrush? textColor = null)
+        {
+            if (text is null)
+            {
+                return;
+            }
+            textColor = XBrushes.Black;
+            format ??= XStringFormats.Center;
 
-        public XFont AutoFontSize(string text, double maxSize, double width, XGraphics gfx)
+            gfx.DrawString(text, AutoFontSize(text, fontSize, rect.Width, gfx), textColor, rect, format);
+        }
+        private static XFont AutoFontSize(string text, double maxSize, double width, XGraphics gfx)
         {
             for (double i = maxSize; i >= 0; i-=0.5)
             {
@@ -85,6 +109,28 @@ namespace VolleyballTools.PDF
             }
             throw new Exception();
         }
+        private (XGraphics,PdfDocument) LoadTemplate(ScoresheetTemplate template)
+        {
+            var pdfdoc = new PdfDocument();
+
+            PdfDocument inputDocument = PdfReader.Open(Template(template), PdfDocumentOpenMode.Import);
+            var templatePage = inputDocument.Pages[0];
+            templatePage.Size = PdfSharpCore.PageSize.A3;
+            templatePage.Orientation = PdfSharpCore.PageOrientation.Landscape;
+
+            //var page = pdfdoc.AddPage();
+            var page = pdfdoc.AddPage(templatePage);
+            page.Orientation = PdfSharpCore.PageOrientation.Landscape;
+            page.Size = PdfSharpCore.PageSize.A3;
+            page.Rotate = 0;
+
+            var gfx = XGraphics.FromPdfPage(page);
+            gfx.RotateAtTransform(-90, new XPoint(0, 0));
+            gfx.TranslateTransform(-842, 0);
+
+            return (gfx,pdfdoc);
+        }
+
         public Stream Generate3SET(string? MatchName = null, string? Venue = null, string? Hall = null, DateTime? Date = null, string? MatchNumber = null, string? ATeam = null, string? BTeam = null, bool? isMen = null, DateTime? MatchTime = null)
         {
             var pdfdoc = new PdfDocument();
@@ -587,8 +633,6 @@ namespace VolleyballTools.PDF
             }
 
             pdfdoc.Pages[0].Rotate = 90;
-            var h = pdfdoc.Pages[0].Height;
-            var w = pdfdoc.Pages[0].Width;
 
             var stream = new MemoryStream();
             pdfdoc.Save(stream, false);
@@ -866,6 +910,119 @@ namespace VolleyballTools.PDF
                    new XRect(549.4, 57.6, 29.5, 18.7),
                    XStringFormats.Center);
             }
+            pdfdoc.Pages[0].Rotate = 90;
+
+            var stream = new MemoryStream();
+            pdfdoc.Save(stream, false);
+
+            return stream;
+        }
+        public Stream GenerateBeach1SET(Pages.BeachVolleyball.BeachMatch match)
+        {
+            var pdfdoc = new PdfDocument();
+
+            PdfDocument inputDocument = PdfReader.Open(Template(ScoresheetTemplate.beachone), PdfDocumentOpenMode.Import);
+            var templatePage = inputDocument.Pages[0];
+            templatePage.Size = PdfSharpCore.PageSize.A3;
+            templatePage.Orientation = PdfSharpCore.PageOrientation.Landscape;
+
+            var page = pdfdoc.AddPage(templatePage);
+            page.Orientation = PdfSharpCore.PageOrientation.Landscape;
+            page.Size = PdfSharpCore.PageSize.A3;
+            page.Rotate = 0;
+
+            var gfx = XGraphics.FromPdfPage(page);
+            gfx.RotateAtTransform(-90, new XPoint(0, 0));
+            gfx.TranslateTransform(-842, 0);
+
+            RenderText(ref gfx, match.MatchName, new XRect(88.3, 50.4, 559.2, 16.5), 15, XStringFormats.CenterLeft);
+            RenderText(ref gfx, match.Venue, new XRect(129.8, 73.2, 98.4, 14.88));
+            RenderText(ref gfx, match.Hall, new XRect(264, 73.2, 112.3, 14.88));
+            RenderText(ref gfx, match.MatchNumber, new XRect(54.9, 78.9, 38.6, 8.8));
+            if(match.DateTime is not null)
+            {
+                RenderText(ref gfx, match.DateTime.Value.Year.ToString(), new XRect(435.1, 78.9, 31.6, 10.0));
+                RenderText(ref gfx, match.DateTime.Value.Month.ToString(), new XRect(477.3, 78.9, 11.0, 10.0));
+                RenderText(ref gfx, match.DateTime.Value.Day.ToString(), new XRect(496, 78.9, 12.4, 10.0));
+            }
+
+            if (match.ATeam is not null)
+            {
+
+                RenderText(ref gfx, match.ATeam.Prefecture, new XRect(319.2, 101, 78.4, 12.4));
+                RenderText(ref gfx, match.ATeam.Name, new XRect(84.7, 405.3, 62.8, 20.1));
+
+                if (match.ATeam.Player1 is not null)
+                {
+                    RenderText(ref gfx, match.ATeam.Player1.Number.ToString(), new XRect(49.4, 441.8, 23.6, 18.4));
+                    RenderText(ref gfx, match.ATeam.Player1.Name, new XRect(75.8, 441.8, 80.6, 18.4));
+                    RenderText(ref gfx, match.ATeam.Player1.Name, new XRect(77, 95.2, 106.8, 18.2));
+                    RenderText(ref gfx, match.ATeam.Player1.Name, new XRect(279.6, 493.9, 29.2, 18.4));
+                }
+                if(match.ATeam.Player2 is not null)
+                {
+                    RenderText(ref gfx, match.ATeam.Player2.Number.ToString(), new XRect(49.4, 463.9, 23.6, 18.4));
+                    RenderText(ref gfx, match.ATeam.Player2.Name, new XRect(75.8, 463.9, 80.6, 18.4));
+                    RenderText(ref gfx, match.ATeam.Player2.Name, new XRect(207.1, 95.2, 106.8, 18.2));
+                    RenderText(ref gfx, match.ATeam.Player2.Name, new XRect(320.1, 493.9, 29.2, 18.4));
+                }
+            }
+            if (match.BTeam is not null)
+            {
+
+            }
+
+            switch (match.Sex)
+            {
+                case Sex.Men:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 531.8, 84.9, 541.1, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 531.8, 76.3, 541.1, 84.9);
+                    break;
+                case Sex.Women:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 558.7, 84.9, 568, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 558.7, 76.3, 568, 84.9);
+                    break;
+                case null:
+                    break;
+            }
+
+            switch (match.Round)
+            {
+                case Round.Final:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 595.6, 84.9, 605, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 595.6, 76.3, 605, 84.9);
+                    break;
+                case Round.Qualification:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 629.2, 84.9, 638.6, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 629.2, 76.3, 638.6, 84.9);
+                    break;
+                case null:
+                    break;
+            }
+
+            switch (match.Stage)
+            {
+                case Stage.Pool:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 672.9, 84.9, 682.5, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 672.9, 76.3, 682.5, 84.9);
+                    break;
+                case Stage.Rank:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 706.3, 84.9, 715.9, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 706.3, 76.3, 715.9, 84.9);
+                    break;
+                case Stage.SemiFinal:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 746.6, 84.9, 756.2, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 746.6, 76.3, 756.2, 84.9);
+                    break;
+                case Stage.Final:
+                    gfx.DrawLine(new XPen(XBrushes.Black), 780.4, 84.9, 790, 76.3);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 780.4, 76.3, 790, 84.9);
+                    break;
+                case null:
+                    break;
+            }
+
+
             pdfdoc.Pages[0].Rotate = 90;
 
             var stream = new MemoryStream();
