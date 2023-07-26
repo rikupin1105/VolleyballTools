@@ -1,4 +1,5 @@
 ﻿@page "/scoresheetBeach"
+@using VolleyballTools.Model;
 @inject IJSRuntime JS
 @inject PDF.PDF PDF
 
@@ -23,82 +24,106 @@
 
 <div class="mb-3 mt-3">
     <label class="form-label fw-bold">試合名</label>
-    <input type="text" @bind="competition.MatchName" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="beachMatch.MatchName" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label fw-bold">開催地</p>
-    <input type="text" @bind="competition.Venue" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="beachMatch.Venue" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">会場名</p>
-    <input type="text" @bind="competition.Hall" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="beachMatch.Hall" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">開催日</p>
-    <input type="date" @bind="competition.DateTime" class="form-control" id="exampleFormControlInput1">
+    <input type="date" @bind="beachMatch.DateTime" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">試合番号</p>
-    <input type="text" @bind="match.MatchNumber" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="beachMatch.MatchNumber" class="form-control" id="exampleFormControlInput1">
 </div>
 
 
 <div class="card mb-3">
     <div class="mb-3 card-body">
-        <p class="form-label">Aチーム名</p>
-        <input type="text" @bind="match.ATeam" class="form-control mb-3">
+        <p class="form-label mb-3">Aチーム</p>
+        <div class="mb-1">
+            <p class="form-label">チーム名</p>
+            <input type="text" @bind="beachMatch.ATeam.Name" class="form-control">
+        </div>
+        <div class="mb-1">
+            <p class="form-label">都道府県</p>
+            <input type="text" @bind="beachMatch.ATeam.Prefecture" class="form-control">
+        </div>
 
         <div class="row me-1">
-            <div class="col-md-2 col-3">
-                <p class="form-label" hidden="@(ATeamPlayers.Count()<=0)">番号</p>
+            <div class="col-3">
+                <p class="form-label">番号</p>
             </div>
 
-            <div class="col-md-9 col-7">
-                <p class="form-label" hidden="@(ATeamPlayers.Count()<=0)">名前</p>
+            <div class="col-9">
+                <p class="form-label">名前</p>
             </div>
 
-            @foreach (var player in ATeamPlayers)
-            {
-                <div class="mb-1 col-md-2 col-3">
-                    <input type="number" @bind="player.Number" class="form-control">
-                </div>
+            <div class="mb-1 col-3">
+                <input type="number" @bind="beachMatch.ATeam.Player1.Number" class="form-control">
+            </div>
 
-                <div class="mb-1 col-lg-9 col-md-8 col-7">
-                    <input type="text" @bind="player.Name" class="form-control">
-                </div>
-            }
+            <div class="mb-1 col-9">
+                <input type="text" @bind="beachMatch.ATeam.Player1.Name" class="form-control">
+            </div>
+
+            <div class="mb-1 col-3">
+                <input type="number" @bind="beachMatch.ATeam.Player2.Number" class="form-control">
+            </div>
+
+            <div class="mb-1 col-9">
+                <input type="text" @bind="beachMatch.ATeam.Player2.Name" class="form-control">
+            </div>
         </div>
     </div>
 </div>
 
 <div class="card mb-3">
     <div class="mb-3 card-body">
-        <p class="form-label">Bチーム名</p>
-        <input type="text" @bind="match.BTeam" class="form-control mb-3">
+        <p class="form-label mb-3">Bチーム</p>
+        <div class="mb-1">
+            <p class="form-label">チーム名</p>
+            <input type="text" @bind="beachMatch.BTeam.Name" class="form-control">
+        </div>
+        <div class="mb-1">
+            <p class="form-label">都道府県</p>
+            <input type="text" @bind="beachMatch.BTeam.Prefecture" class="form-control">
+        </div>
 
         <div class="row me-1">
-            <div class="col-md-2 col-3">
-                <p class="form-label" hidden="@(BTeamPlayers.Count()<=0)">番号</p>
+            <div class="col-3">
+                <p class="form-label">番号</p>
             </div>
 
-            <div class="col-md-9 col-7">
-                <p class="form-label" hidden="@(BTeamPlayers.Count()<=0)">名前</p>
+            <div class="col-9">
+                <p class="form-label">名前</p>
             </div>
 
-            @foreach (var player in BTeamPlayers)
-            {
-                <div class="mb-1 col-md-2 col-3">
-                    <input type="number" @bind="player.Number" class="form-control">
-                </div>
+            <div class="mb-1 col-3">
+                <input type="number" @bind="beachMatch.BTeam.Player1.Number" class="form-control">
+            </div>
 
-                <div class="mb-1 col-lg-9 col-md-8 col-7">
-                    <input type="text" @bind="player.Name" class="form-control">
-                </div>
-            }
+            <div class="mb-1 col-9">
+                <input type="text" @bind="beachMatch.BTeam.Player1.Name" class="form-control">
+            </div>
+
+            <div class="mb-1 col-3">
+                <input type="number" @bind="beachMatch.BTeam.Player2.Number" class="form-control">
+            </div>
+
+            <div class="mb-1 col-9">
+                <input type="text" @bind="beachMatch.BTeam.Player2.Name" class="form-control">
+            </div>
         </div>
     </div>
 </div>
@@ -106,20 +131,76 @@
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">性別</label>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(true))" id="SexRadio1">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>beachMatch.Sex = Sex.Men)" id="SexRadio1">
         <label class="form-check-label" for="SexRadio1">
             男子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(false))" id="SexRadio2">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>beachMatch.Sex = Sex.Women)" id="SexRadio2">
         <label class="form-check-label" for="SexRadio2">
             女子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(null))" id="SexRadio3" checked>
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>beachMatch.Sex = null)" id="SexRadio3" checked>
         <label class="form-check-label" for="SexRadio3">
+            未選択
+        </label>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">本戦/予選</label>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="RoundRadio" @onclick="@(()=>beachMatch.Round = Round.Final )" id="RoundRadio1">
+        <label class="form-check-label" for="RoundRadio1">
+            本戦
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="RoundRadio" @onclick="@(()=>beachMatch.Round = Round.Qualification)" id="RoundRadio2">
+        <label class="form-check-label" for="RoundRadio2">
+            予選
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="RoundRadio" @onclick="@(()=>beachMatch.Round = null)" id="RoundRadio3" checked>
+        <label class="form-check-label" for="RoundRadio3">
+            未選択
+        </label>
+    </div>
+</div>
+
+<div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">本戦/予選</label>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="StageRadio" @onclick="@(()=>beachMatch.Stage = Stage.Pool )" id="StageRadio1">
+        <label class="form-check-label" for="StageRadio1">
+            プール選
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="StageRadio" @onclick="@(()=>beachMatch.Stage = Stage.Rank)" id="StageRadio2">
+        <label class="form-check-label" for="StageRadio2">
+            順位
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="StageRadio" @onclick="@(()=>beachMatch.Stage = Stage.SemiFinal)" id="StageRadio3">
+        <label class="form-check-label" for="StageRadio3">
+            準決勝
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="StageRadio" @onclick="@(()=>beachMatch.Stage = Stage.Final)" id="StageRadio4">
+        <label class="form-check-label" for="StageRadio4">
+            決勝
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="StageRadio" @onclick="@(()=>beachMatch.Stage = null)" id="StageRadio5" checked>
+        <label class="form-check-label" for="StageRadio5">
             未選択
         </label>
     </div>
@@ -128,43 +209,37 @@
 <button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">生成</button>
 
 @code {
-    private void SelectGender(bool? b)
+    public int SET { get; set; } = 1;
+
+    public BeachMatch beachMatch = new();
+    public class BeachMatch : Match
     {
-        match.isMen = b;
+        public Team ATeam { get; set; } = new();
+        public Team BTeam { get; set; } = new();
+        public Round? Round { get; set; } = null;
+        public Stage? Stage { get; set; } = null;
     }
-    public Competition competition = new();
-    public Match match = new();
-    public int SET { get; set; } = 3;
-    public List<Player> ATeamPlayers { get; set; } = new();
-    public List<Player> BTeamPlayers { get; set; } = new();
-    public class Competition
+    public class Team
     {
-        public string? MatchName { get; set; } = null;
-        public string? Venue { get; set; } = null;
-        public string? Hall { get; set; } = null;
-        public DateTime? DateTime { get; set; } = null;
-        public DateTime? MatchTime { get; set; } = null;
-    }
-    public class Match : Competition
-    {
-        public bool? isMen { get; set; } = null;
-        public string? ATeam { get; set; } = null;
-        public string? BTeam { get; set; } = null;
-        public string? MatchNumber { get; set; } = null;
+        public string? Name { get; set; }
+        public string? Prefecture { get; set; }
+
+        public Player Player1 { get; set; } = new();
+        public Player Player2 { get; set; } = new();
     }
 
     private async void IncrementCount()
     {
-        var fileStream = PDF.Generate9Parson(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime, ATeamPlayers,BTeamPlayers);
+        var fileStream = PDF.GenerateBeach1SET(beachMatch);
         await DownloadFileFromStream(fileStream);
     }
 
     private async Task DownloadFileFromStream(Stream fileStream)
     {
         var fileName = $"Scoresheet.pdf";
-        if (competition.MatchName is not null)
+        if (beachMatch.MatchName is not null)
         {
-            fileName = $"{competition.MatchName}-{fileName}";
+            fileName = $"{beachMatch.MatchName}-{fileName}";
         }
 
         using var streamRef = new DotNetStreamReference(stream: fileStream);
