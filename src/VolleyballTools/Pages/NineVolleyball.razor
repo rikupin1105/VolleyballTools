@@ -176,7 +176,7 @@
 
     private async void IncrementCount()
     {
-        var fileStream = PDF.Generate9Parson(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime, ATeamPlayers,BTeamPlayers);
+        var fileStream = PDF.Generate9Parson(match);
         await DownloadFileFromStream(fileStream);
     }
 
