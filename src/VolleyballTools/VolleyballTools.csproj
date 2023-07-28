@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="PDF\Beach1.pdf" />
     <None Remove="PDF\Libero3.pdf" />
     <None Remove="PDF\Libero5.pdf" />
   </ItemGroup>
@@ -22,6 +23,7 @@
 	  <EmbeddedResource Include="PDF\9Parson.pdf">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </EmbeddedResource>
+	  <EmbeddedResource Include="PDF\Beach1.pdf" />
 	  <EmbeddedResource Include="PDF\Libero3.pdf">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </EmbeddedResource>

@@ -1,4 +1,5 @@
 ﻿@page "/liberoControl"
+@using VolleyballTools.Model;
 @inject IJSRuntime JS
 @inject PDF.PDF PDF
 
@@ -23,27 +24,27 @@
 
 <div class="mb-3 mt-3">
     <label class="form-label fw-bold">試合名</label>
-    <input type="text" @bind="competition.MatchName" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="match.MatchName" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label fw-bold">開催地</p>
-    <input type="text" @bind="competition.Venue" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="match.Venue" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">会場名</p>
-    <input type="text" @bind="competition.Hall" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="match.Hall" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">開催日</p>
-    <input type="date" @bind="competition.DateTime" class="form-control" id="exampleFormControlInput1">
+    <input type="date" @bind="match.DateTime" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">試合設定時間</p>
-    <input type="time" @bind="competition.MatchTime" class="form-control" id="exampleFormControlInput1">
+    <input type="time" @bind="match.MatchTime" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
@@ -53,30 +54,30 @@
 
 <div class="mb-3">
     <p class="form-label">Aチーム名</p>
-    <input type="text" @bind="match.ATeam" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="match.ATeamName" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <p class="form-label">Bチーム名</p>
-    <input type="text" @bind="match.BTeam" class="form-control" id="exampleFormControlInput1">
+    <input type="text" @bind="match.BTeamName" class="form-control" id="exampleFormControlInput1">
 </div>
 
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">性別</label>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(true))" id="SexRadio1">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=Sex.Men)" id="SexRadio1">
         <label class="form-check-label" for="SexRadio1">
             男子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(false))" id="SexRadio2">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=Sex.Women)" id="SexRadio2">
         <label class="form-check-label" for="SexRadio2">
             女子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>SelectGender(null))" id="SexRadio3" checked>
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=null)" id="SexRadio3" checked>
         <label class="form-check-label" for="SexRadio3">
             未選択
         </label>
@@ -102,39 +103,19 @@
 <button class="btn btn-primary mb-3 px-5" @onclick="Create">生成</button>
 
 @code {
-    private void SelectGender(bool? b)
-    {
-        match.isMen = b;
-    }
-    public Competition competition = new();
     public Match match = new();
     public int SET { get; set; } = 3;
-    public class Competition
-    {
-        public string? MatchName { get; set; } = null;
-        public string? Venue { get; set; } = null;
-        public string? Hall { get; set; } = null;
-        public DateTime? DateTime { get; set; } = null;
-        public DateTime? MatchTime { get; set; } = null;
-    }
-    public class Match : Competition
-    {
-        public bool? isMen { get; set; } = null;
-        public string? ATeam { get; set; } = null;
-        public string? BTeam { get; set; } = null;
-        public string? MatchNumber { get; set; } = null;
-    }
 
     private async void Create()
     {
         Stream fileStream;
         if (SET == 3)
         {
-            fileStream = PDF.GanerateLibero3SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+            fileStream = PDF.GanerateLibero3SET(match);
         }
         else
         {
-            fileStream = PDF.GanerateLibero5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+            fileStream = PDF.GanerateLibero5SET(match);
         }
 
         await DownloadFileFromStream(fileStream, "LiberoControlSheet.pdf");
@@ -142,9 +123,9 @@
 
     private async Task DownloadFileFromStream(Stream fileStream,string fileName)
     {
-        if (competition.MatchName is not null)
+        if (match.MatchName is not null)
         {
-            fileName = $"{competition.MatchName}-{fileName}";
+            fileName = $"{match.MatchName}-{fileName}";
         }
 
         using var streamRef = new DotNetStreamReference(stream: fileStream);
