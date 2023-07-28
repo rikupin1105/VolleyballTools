@@ -100,14 +100,14 @@
     </div>
 </div>
 
-<button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">スコアシートを生成</button>
+<button class="btn btn-primary mb-3 px-5" @onclick="Create">スコアシートを生成</button>
 <button class="btn btn-primary mb-3 px-5" @onclick="LiberoControlSheet">リベロコントロールシートを生成</button>
 
 @code {
     public Match match = new();
     public int SET { get; set; } = 3;
 
-    private async void IncrementCount()
+    private async void Create()
     {
         Stream fileStream;
         if (SET == 3)

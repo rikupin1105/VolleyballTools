@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<button class="btn btn-primary mb-3 px-5" @onclick="IncrementCount">生成</button>
+<button class="btn btn-primary mb-3 px-5" @onclick="Create">生成</button>
 
 @code {
     private void PlayerDeleteAt(Player player, bool isAteam)
@@ -173,8 +173,7 @@
     public NineParsonMatch match = new();
     public int SET { get; set; } = 3;
 
-
-    private async void IncrementCount()
+    private async void Create()
     {
         var fileStream = PDF.Generate9Parson(match);
         await DownloadFileFromStream(fileStream);
