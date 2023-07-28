@@ -112,11 +112,11 @@
         Stream fileStream;
         if (SET == 3)
         {
-            fileStream = PDF.Generate3SET(match);
+            fileStream = VolleyballTools.PDF.PDF.Generate3SET(match);
         }
         else
         {
-            fileStream = PDF.Generate5SET(match);
+            fileStream = VolleyballTools.PDF.PDF.Generate5SET(match);
         }
 
         await DownloadFileFromStream(fileStream, "Scoresheet.pdf");
@@ -126,11 +126,11 @@
         Stream fileStream;
         if (SET == 3)
         {
-            fileStream = PDF.GanerateLibero3SET(match);
+            fileStream = VolleyballTools.PDF.PDF.GanerateLibero3SET(match);
         }
         else
         {
-            fileStream = PDF.GanerateLibero3SET(match);
+            fileStream = VolleyballTools.PDF.PDF.GanerateLibero3SET(match);
             //fileStream = PDF.GanerateLibero5SET(match.MatchName, match.Venue, match.Hall, match.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, match.MatchTime);
         }
         await DownloadFileFromStream(fileStream,"LiberoControlSheet.pdf");

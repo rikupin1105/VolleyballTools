@@ -141,7 +141,7 @@ namespace VolleyballTools.PDF
             return (gfx, pdfdoc);
         }
 
-        public Stream Generate3SET(Match match)
+        public static Stream Generate3SET(Match match)
         {
             var t = LoadTemplate(ScoresheetTemplate.three);
             var gfx = t.Item1;
@@ -193,7 +193,7 @@ namespace VolleyballTools.PDF
 
             return stream;
         }
-        public Stream Generate5SET(Match match)
+        public static Stream Generate5SET(Match match)
         {
             var t = LoadTemplate(ScoresheetTemplate.five);
             var gfx = t.Item1;
@@ -247,7 +247,7 @@ namespace VolleyballTools.PDF
 
             return stream;
         }
-        public Stream Generate9Parson(NineParsonMatch match)
+        public static Stream Generate9Parson(NineParsonMatch match)
         {
             var t = LoadTemplate(ScoresheetTemplate.nineParson);
             var gfx = t.Item1;
@@ -319,7 +319,7 @@ namespace VolleyballTools.PDF
 
             return stream;
         }
-        public Stream GanerateLibero3SET(Match match)
+        public static Stream GanerateLibero3SET(Match match)
         {
             var t = LoadTemplate(ScoresheetTemplate.liberoThree, PageSize.A4);
             var gfx = t.Item1;
@@ -366,7 +366,7 @@ namespace VolleyballTools.PDF
 
             return stream;
         }
-        public Stream GanerateLibero5SET(Match match)
+        public static Stream GanerateLibero5SET(Match match)
         {
             var t = LoadTemplate(ScoresheetTemplate.liberoFive, PageSize.A4);
             var gfx = t.Item1;

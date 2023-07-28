@@ -111,11 +111,11 @@
         Stream fileStream;
         if (SET == 3)
         {
-            fileStream = PDF.GanerateLibero3SET(match);
+            fileStream = VolleyballTools.PDF.PDF.GanerateLibero3SET(match);
         }
         else
         {
-            fileStream = PDF.GanerateLibero5SET(match);
+            fileStream = VolleyballTools.PDF.PDF.GanerateLibero5SET(match);
         }
 
         await DownloadFileFromStream(fileStream, "LiberoControlSheet.pdf");
