@@ -76,13 +76,13 @@
                 <div class="mb-1 col-lg-9 col-md-8 col-7">
                     <input type="text" @bind="player.Name" class="form-control">
                 </div>
-                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>PlayerDeleteAt(player,true))">
+                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>match.ATeamPlayers.Remove(player))">
                     削除
                 </button>
             }
         </div>
 
-        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>PlayerAdd(true))" disabled="@(match.ATeamPlayers.Count>=15)">
+        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>match.BTeamPlayers.Add(new()))" disabled="@(match.ATeamPlayers.Count>=15)">
             選手を追加
         </button>
     </div>
@@ -111,13 +111,13 @@
                 <div class="mb-1 col-lg-9 col-md-8 col-7">
                     <input type="text" @bind="player.Name" class="form-control">
                 </div>
-                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>PlayerDeleteAt(player,false))">
+                <button class="mb-1 col-lg-1 col-md-2 col-2 btn btn-danger " @onclick="@(()=>match.BTeamPlayers.Remove(player))">
                     削除
                 </button>
             }
         </div>
 
-        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>PlayerAdd(false))" disabled="@(match.BTeamPlayers.Count>=15)">
+        <button class="btn btn-primary mt-1" type="button" @onclick="@(()=>match.BTeamPlayers.Add(new()))" disabled="@(match.BTeamPlayers.Count>=15)">
             選手を追加
         </button>
     </div>
@@ -148,28 +148,6 @@
 <button class="btn btn-primary mb-3 px-5" @onclick="Create">生成</button>
 
 @code {
-    private void PlayerDeleteAt(Player player, bool isAteam)
-    {
-        if (isAteam)
-        {
-            match.ATeamPlayers.Remove(player);
-        }
-        else
-        {
-            match.BTeamPlayers.Remove(player);
-        }
-    }
-    private void PlayerAdd(bool isAteam)
-    {
-        if (isAteam)
-        {
-            match.ATeamPlayers.Add(new());
-        }
-        else
-        {
-            match.BTeamPlayers.Add(new());
-        }
-    }
     public NineParsonMatch match = new();
     public int SET { get; set; } = 3;
 
