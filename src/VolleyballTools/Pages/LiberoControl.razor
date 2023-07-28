@@ -111,11 +111,11 @@
         Stream fileStream;
         if (SET == 3)
         {
-            fileStream = PDF.GanerateLibero3SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+            fileStream = PDF.GanerateLibero3SET(match);
         }
         else
         {
-            fileStream = PDF.GanerateLibero5SET(competition.MatchName, competition.Venue, competition.Hall, competition.DateTime, match.MatchNumber, match.ATeam, match.BTeam, match.isMen, competition.MatchTime);
+            fileStream = PDF.GanerateLibero5SET(match);
         }
 
         await DownloadFileFromStream(fileStream, "LiberoControlSheet.pdf");
