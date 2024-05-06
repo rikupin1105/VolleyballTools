@@ -126,19 +126,19 @@
 <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">性別</label>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" id="SexRadio1">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=Sex.Men)" id="SexRadio1">
         <label class="form-check-label" for="SexRadio1">
             男子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" id="SexRadio2">
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=Sex.Women)" id="SexRadio2">
         <label class="form-check-label" for="SexRadio2">
             女子
         </label>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="radio" name="GenderRadio" id="SexRadio3" checked>
+        <input class="form-check-input" type="radio" name="GenderRadio" @onclick="@(()=>match.Sex=null)" id="SexRadio3" checked>
         <label class="form-check-label" for="SexRadio3">
             未選択
         </label>

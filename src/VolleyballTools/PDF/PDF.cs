@@ -253,35 +253,35 @@ namespace VolleyballTools.PDF
             var gfx = t.Item1;
             var pdfdoc = t.Item2;
 
-            gfx.RenderText(match.MatchName, new XRect(60, 56, 590, 15), format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.Venue, new XRect(60, 75, 170, 15), format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.Hall, new XRect(60, 94, 170, 15), format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.MatchNumber, new XRect(470, 75, 50, 15));
+            gfx.RenderText(match.MatchName, new XRect(60, 53, 590, 15), format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Venue, new XRect(60, 72, 170, 15), format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Hall, new XRect(60, 90, 170, 15), format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.MatchNumber, new XRect(470-3, 72, 50, 15));
 
 
             if (match.DateTime is not null)
             {
-                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(290, 75, 40, 15));
-                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(350, 75, 20, 15));
-                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(390, 75, 20, 15));
+                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(290, 72, 40, 15));
+                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(350, 72, 20, 15));
+                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(390, 72, 20, 15));
             }
 
-            gfx.RenderText(match.ATeamName, new XRect(310, 94, 105, 15));
-            gfx.RenderText(match.ATeamName, new XRect(675, 122, 64, 15), 8);
+            gfx.RenderText(match.ATeamName, new XRect(310, 91, 105, 15));
+            gfx.RenderText(match.ATeamName, new XRect(675, 119, 64, 15), 8);
 
-            gfx.RenderText(match.BTeamName, new XRect(435, 94, 105, 15));
-            gfx.RenderText(match.BTeamName, new XRect(742, 122, 64, 15), 8);
+            gfx.RenderText(match.BTeamName, new XRect(435, 91, 105, 15));
+            gfx.RenderText(match.BTeamName, new XRect(742, 119, 64, 15), 8);
 
 
             switch (match.Sex)
             {
                 case Sex.Men:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 290+305, 107.5, 581, 96.5);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 290+305, 96.5, 581, 107.5);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 290+305, 103.5, 581, 93.5);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 290+305, 93.5, 581, 103.5);
                     break;
                 case Sex.Women:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 633, 107.5, 621, 96.5);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 633, 96.5, 621, 107.5);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 633, 103.5, 621, 93.5);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 633, 93.5, 621, 103.5);
                     break;
                 case null:
                     break;
@@ -289,8 +289,8 @@ namespace VolleyballTools.PDF
 
             if (match.MatchTime is not null)
             {
-                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(590, 75, 30, 15));
-                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(630, 75, 20, 15));
+                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(590, 72, 30, 15));
+                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(630, 72, 20, 15));
             }
 
 
@@ -298,8 +298,8 @@ namespace VolleyballTools.PDF
             {
                 for (int i = 0; i < match.ATeamPlayers.Count; i++)
                 {
-                    gfx.RenderText(match.ATeamPlayers[i].Number.ToString(), new XRect(660, 154 + (i * 14), 15, 10), 8);
-                    gfx.RenderText(match.ATeamPlayers[i].Name, new XRect(677, 154 + (i * 14), 60, 10), 8);
+                    gfx.RenderText(match.ATeamPlayers[i].Number.ToString(), new XRect(660, 151 + (i * 14), 15, 10), 8);
+                    gfx.RenderText(match.ATeamPlayers[i].Name, new XRect(677, 151 + (i * 14), 60, 10), 8);
                 }
             }
 
@@ -307,8 +307,8 @@ namespace VolleyballTools.PDF
             {
                 for (int i = 0; i < match.BTeamPlayers.Count; i++)
                 {
-                    gfx.RenderText(match.BTeamPlayers[i].Number.ToString(), new XRect(742, 154 + (i * 14), 15, 10), 8);
-                    gfx.RenderText(match.BTeamPlayers[i].Name, new XRect(759, 154 + (i * 14), 60, 10), 8);
+                    gfx.RenderText(match.BTeamPlayers[i].Number.ToString(), new XRect(742, 151 + (i * 14), 15, 10), 8);
+                    gfx.RenderText(match.BTeamPlayers[i].Name, new XRect(759, 151 + (i * 14), 60, 10), 8);
                 }
             }
 
@@ -325,30 +325,30 @@ namespace VolleyballTools.PDF
             var gfx = t.Item1;
             var pdfdoc = t.Item2;
 
-            gfx.RenderText(match.MatchName, new XRect(90, 31.6, 483.1, 15.6), format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.Venue, new XRect(90, 49.9, 221.7, 12.9), 9, format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.Hall, new XRect(90, 65.5, 221.7, 16.3), 9, format: XStringFormats.CenterLeft);
-            gfx.RenderText(match.MatchNumber, new XRect(223.9, 84.2, 91.4, 13.4));
+            gfx.RenderText(match.MatchName, new XRect(93, 51, 483.1, 15.6), format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Venue, new XRect(93, 69.3, 221.7, 12.9), 9, format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Hall, new XRect(93, 83, 221.7, 16.3), 9, format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.MatchNumber, new XRect(223.9, 100, 91.4, 13.4));
 
             if (match.DateTime is not null)
             {
-                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(361.2, 50.1, 30.4, 18.7), 8);
-                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(401.5, 50.1, 16.0, 18.7), 8);
-                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(426, 50.1, 16.0, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(361.2, 68, 30.4, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(401.5, 68, 16.0, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(426, 68, 16.0, 18.7), 8);
             }
 
-            gfx.RenderText(match.ATeamName, new XRect(349.4, 72.2, 81.3, 24.9), 8);
-            gfx.RenderText(match.BTeamName, new XRect(463.6, 72.2, 81.3, 24.9), 8);
+            gfx.RenderText(match.ATeamName, new XRect(349.4, 88, 81.3, 24.9), 8);
+            gfx.RenderText(match.BTeamName, new XRect(463.6, 88, 81.3, 24.9), 8);
 
             switch (match.Sex)
             {
                 case Sex.Men:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 111.3, 86.4, 125.2, 95.2);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 111.3, 95.2, 125.2, 86.4);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 111.3, 102, 125.2, 111);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 111.3, 111, 125.2, 102);
                     break;
                 case Sex.Women:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 154.5, 86.4, 168.4, 95.2);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 154.5, 95.2, 168.4, 86.4);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 154.5, 102, 168.4, 111);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 154.5, 111, 168.4, 102);
                     break;
                 case null:
                     break;
@@ -356,8 +356,8 @@ namespace VolleyballTools.PDF
 
             if (match.MatchTime is not null)
             {
-                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(516.4, 50.1, 26.4, 18.7), 8);
-                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(546.7, 50.1, 29.5, 18.7), 8);
+                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(516.4, 68, 26.4, 18.7), 8);
+                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(546.7, 68, 29.5, 18.7), 8);
             }
             pdfdoc.Pages[0].Rotate = 90;
 
@@ -372,30 +372,30 @@ namespace VolleyballTools.PDF
             var gfx = t.Item1;
             var pdfdoc = t.Item2;
 
-            gfx.RenderText(match.MatchName, new XRect(97.4, 39.3, 478.8, 15.6));
-            gfx.RenderText(match.Venue, new XRect(97.4, 57.6, 218.6, 12.9), 9);
-            gfx.RenderText(match.Hall, new XRect(97.4, 73.2, 218.6, 16.3), 9);
-            gfx.RenderText(match.MatchNumber, new XRect(227.5, 91.9, 91.4, 13.4));
+            gfx.RenderText(match.MatchName, new XRect(97.4, 42.3, 478.8, 15.6), format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Venue, new XRect(97.4, 60.6, 218.6, 12.9), 9, format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.Hall, new XRect(97.4, 76.2, 218.6, 16.3), 9, format: XStringFormats.CenterLeft);
+            gfx.RenderText(match.MatchNumber, new XRect(227.5, 94.9, 91.4, 13.4));
 
             if (match.DateTime is not null)
             {
-                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(364.5, 57.8, 30.4, 18.7), 8);
-                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(404.8, 57.8, 16.0, 18.7), 8);
-                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(429.3, 57.8, 16.0, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Year.ToString(), new XRect(364.5, 60.8, 30.4, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Month.ToString(), new XRect(404.8, 60.8, 16.0, 18.7), 8);
+                gfx.RenderText(match.DateTime.Value.Day.ToString(), new XRect(429.3, 60.8, 16.0, 18.7), 8);
             }
 
-            gfx.RenderText(match.ATeamName, new XRect(353, 79.9, 81.3, 24.9), 8);
-            gfx.RenderText(match.BTeamName, new XRect(467.2, 79.9, 81.3, 24.9), 8);
+            gfx.RenderText(match.ATeamName, new XRect(353, 83, 84.3, 24.9), 8);
+            gfx.RenderText(match.BTeamName, new XRect(467.2, 83, 84.3, 24.9), 8);
 
             switch (match.Sex)
             {
                 case Sex.Men:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 115.2, 94.0, 129.1, 102.8);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 115.2, 102.8, 129.1, 94.0);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 109.2, 97.0, 123.1, 105.8);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 109.2, 105.8, 123.1, 97.0);
                     break;
                 case Sex.Women:
-                    gfx.DrawLine(new XPen(XBrushes.Black), 158.4, 94.0, 172.3, 102.8);
-                    gfx.DrawLine(new XPen(XBrushes.Black), 158.4, 102.8, 172.3, 94.0);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 152.4, 97.0, 166.3, 105.8);
+                    gfx.DrawLine(new XPen(XBrushes.Black), 152.4, 105.8, 166.3, 97.0);
                     break;
                 case null:
                     break;
@@ -403,8 +403,8 @@ namespace VolleyballTools.PDF
 
             if (match.MatchTime is not null)
             {
-                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(519.1, 57.6, 26.4, 18.7), 9);
-                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(549.4, 57.6, 29.5, 18.7), 8);
+                gfx.RenderText(match.MatchTime.Value.Hour.ToString(), new XRect(519.1, 60.6, 26.4, 18.7), 9);
+                gfx.RenderText(match.MatchTime.Value.Minute.ToString("00"), new XRect(549.4, 60.6, 29.5, 18.7), 8);
             }
             pdfdoc.Pages[0].Rotate = 90;
 
